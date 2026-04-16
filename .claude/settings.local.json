@@ -3,7 +3,14 @@
     "allow": [
       "Bash(git remote *)",
       "Bash(git branch *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(npm show *)",
+      "Bash(npx shadcn-vue@latest init --defaults)",
+      "Bash(npx asinit *)",
+      "Bash(npx assemblyscript/asinit engine --noInstall)",
+      "Bash(npx @assemblyscript/asinit engine --noInstall)"
     ]
   }
 }

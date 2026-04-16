@@ -72,13 +72,13 @@ Work is broken into phases. Each phase should be fully working before moving to 
 
 > Goal: empty Nuxt app running locally with all tooling in place.
 
-- [ ] Init Nuxt project with TypeScript (`nuxi init`)
-- [ ] Configure `nuxt.config.ts` — enable `@nuxtjs/tailwindcss`, `@pinia/nuxt`, `nuxt-auth-utils`
-- [ ] Install core packages: `vueuse`, `pinia`, `@pinia/nuxt`, `nuxt-auth-utils`, `shadcn-vue`
-- [ ] Initialize shadcn-vue (`npx shadcn-vue@latest init`)
-- [ ] Init AssemblyScript engine package under `engine/` (`npx asinit engine`)
-- [ ] Add `engine:build` npm script — compiles `.wasm` into `public/` for Nuxt to serve
-- [ ] Smoke test: `npm run dev` serves a blank Nuxt page with no errors
+- [x] Init Nuxt project with TypeScript (`nuxi init`)
+- [x] Configure `nuxt.config.ts` — enable `@tailwindcss/vite`, `@pinia/nuxt`, `nuxt-auth-utils`, `@vueuse/nuxt`
+- [x] Install core packages: `vueuse`, `pinia`, `@pinia/nuxt`, `nuxt-auth-utils`, `shadcn-vue`, `tailwindcss`
+- [x] Initialize shadcn-vue (`npx shadcn-vue@latest init --defaults`)
+- [x] Init AssemblyScript engine package under `engine/` (`npx asinit .`)
+- [x] Add `engine:build` npm script — compiles `.wasm` into `public/` for Nuxt to serve
+- [x] Smoke test: `npm run dev` serves a blank Nuxt page with no errors
 
 ---
 
