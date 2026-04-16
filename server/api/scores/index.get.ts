@@ -1,4 +1,4 @@
-import { getLeaderboard } from '~/server/db'
+import { getDrizzle, getLeaderboard } from '../../db'
 
 /**
  * GET /api/scores

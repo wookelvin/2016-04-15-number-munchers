@@ -1,4 +1,4 @@
-import { insertScore } from '~/server/db'
+import { getDrizzle, insertScore } from '../../db'
 
 /**
  * POST /api/scores

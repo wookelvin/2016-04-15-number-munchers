@@ -1,4 +1,4 @@
-import { getDrizzle, upsertUser } from '~/server/db'
+import { getDrizzle, upsertUser } from '../../db'
 
 /**
  * GET /api/auth/google/callback
