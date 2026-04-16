@@ -12,6 +12,18 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   css: ['~/assets/css/main.css'],
+
+  runtimeConfig: {
+    oauth: {
+      google: {
+        clientId: '',
+        clientSecret: '',
+      },
+    },
+    session: {
+      secret: '',
+    },
+  },
   compatibilityDate: '2025-07-15',
 
   vite: {

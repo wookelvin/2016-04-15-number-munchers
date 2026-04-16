@@ -87,18 +87,20 @@ Work is broken into phases. Each phase should be fully working before moving to 
 
 > Goal: Google sign-in works end-to-end locally; user row persisted in local D1.
 
-- [ ] Install **Drizzle ORM**: `npm install drizzle-orm @cloudflare/workers-types`
-- [ ] Create `drizzle.config.ts` — D1 driver configuration (schema path, migrations output)
-- [ ] Define `server/db/schema.ts` — Drizzle schema for `users` and `scores` tables using ORM
-- [ ] Generate initial migration: `npx drizzle-kit generate:sqlite`
-- [ ] Apply migration locally: `wrangler d1 migrations apply DB --local`
-- [ ] Implement `server/db/index.ts` — Drizzle client bound to D1; typed query helpers (insert, select, update user/score)
-- [ ] Configure `nuxt-auth-utils` Google provider in `nuxt.config.ts`
-- [ ] Implement `server/api/auth/google.get.ts` — OAuth redirect
-- [ ] Implement `server/api/auth/google.callback.get.ts` — exchange code, upsert user via Drizzle, set session cookie
-- [ ] Add `server/middleware/session.ts` — attach decoded session to `event.context.user`
-- [ ] Expose `useUserSession()` composable on the frontend (provided by nuxt-auth-utils)
-- [ ] Sign-in / sign-out buttons in app shell; guest state when not signed in
+- [x] Install **Drizzle ORM**: `npm install drizzle-orm @cloudflare/workers-types`
+- [x] Create `drizzle.config.ts` — D1 driver configuration (schema path, migrations output)
+- [x] Define `server/db/schema.ts` — Drizzle schema for `users` and `scores` tables using ORM
+- [x] Generate initial migration: `npx drizzle-kit generate`
+- [x] Apply migration locally: `wrangler d1 migrations apply DB --local`
+- [x] Implement `server/db/index.ts` — Drizzle client bound to D1; typed query helpers (insert, select, update user/score)
+- [x] Configure `nuxt-auth-utils` Google provider in `nuxt.config.ts`
+- [x] Implement `server/api/auth/google.get.ts` — OAuth redirect (via nuxt-auth-utils)
+- [x] Implement `server/api/auth/google.callback.get.ts` — exchange code, upsert user via Drizzle, set session cookie
+- [x] Auth session handled by nuxt-auth-utils (JWT in secure cookie, auto-validated)
+- [x] Expose `useUserSession()` composable on the frontend (provided by nuxt-auth-utils)
+- [x] Sign-in / sign-out buttons in app shell; guest state when not signed in
+- [x] Leaderboard API endpoints (GET /api/scores, POST /api/scores)
+- [x] Home page and leaderboard page UI with Tailwind CSS
 
 ---
 
