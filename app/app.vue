@@ -8,109 +8,61 @@ const handleSignOut = async () => {
 </script>
 
 <template>
-  <div
-    min-h="screen"
-    flex="col"
-    bg="background"
-    text="foreground"
-  >
+  <div class="flex flex-col min-h-screen bg-background text-foreground">
     <NuxtRouteAnnouncer />
 
     <!-- Header / Navigation -->
-    <header
-      border-b="border"
-      bg="card"
-      shadow="sm"
-      sticky="top"
-      z="10"
-    >
-      <div
-        mx="auto"
-        px="4"
-        py="3"
-        max-w="7xl"
-        flex="between"
-        items="center"
-      >
-        <div flex="col">
-          <h1 text="lg font-bold">
+    <header class="border-b border-border bg-card shadow-sm">
+      <div class="mx-auto px-4 py-3 sm:py-4 max-w-7xl flex items-center justify-between">
+        <div class="flex flex-col">
+          <h1 class="text-lg font-bold leading-tight">
             Number Munchers
           </h1>
-          <p text="xs muted-foreground">
+          <p class="text-xs text-muted-foreground">
             WASM-powered arcade game
           </p>
         </div>
 
         <!-- Auth Section -->
-        <div flex="row" gap="3" items="center">
-          <div
-            v-if="loggedIn"
-            flex="row"
-            gap="2"
-            items="center"
-          >
-            <div flex="col" text="right sm">
-              <p font="medium">
+        <div class="flex items-center gap-3">
+          <template v-if="loggedIn">
+            <div class="hidden sm:flex flex-col text-right text-sm">
+              <p class="font-medium">
                 {{ user?.user?.name || 'Player' }}
               </p>
-              <p text="xs muted-foreground">
+              <p class="text-xs text-muted-foreground">
                 {{ user?.user?.email }}
               </p>
             </div>
             <button
-              px="3"
-              py="1.5"
-              rounded="md"
-              text="sm font-medium secondary-foreground"
-              bg="secondary"
-              hover="opacity-90"
-              transition="opacity"
+              class="px-3 py-1.5 rounded-md text-sm font-medium text-secondary-foreground bg-secondary hover:opacity-90 transition-opacity"
               @click="handleSignOut"
             >
               Sign Out
             </button>
-          </div>
-          <div v-else>
+          </template>
+          <template v-else>
             <a
               href="/api/auth/google"
-              px="4"
-              py="2"
-              rounded="md"
-              text="sm font-medium primary-foreground"
-              bg="primary"
-              hover="opacity-90"
-              transition="opacity"
-              inline-block
+              class="inline-block px-4 py-2 rounded-md text-sm font-medium text-primary-foreground bg-primary hover:opacity-90 transition-opacity"
             >
               Sign In with Google
             </a>
-          </div>
+          </template>
         </div>
       </div>
     </header>
 
-    <!-- Main Content -->
-    <main
-      flex="1"
-      mx="auto"
-      w="full"
-      max-w="7xl"
-      px="4"
-      py="8"
-    >
+    <!-- Main Content
+         Note: keep this as a flex-1 block so the game canvas can fill remaining height
+         with h-full on its own container — avoid using 100vh inside pages. -->
+    <main class="flex-1 mx-auto w-full max-w-7xl px-4 py-8">
       <NuxtPage />
     </main>
 
     <!-- Footer -->
-    <footer
-      border-t="border"
-      bg="muted"
-      text="muted-foreground sm"
-      py="6"
-      px="4"
-      mt="auto"
-    >
-      <div mx="auto" max-w="7xl" text="center">
+    <footer class="mt-auto border-t border-border bg-muted text-muted-foreground text-sm py-6 px-4">
+      <div class="mx-auto max-w-7xl text-center">
         <p>&copy; 2026 Number Munchers. Not affiliated with the original.</p>
       </div>
     </footer>
