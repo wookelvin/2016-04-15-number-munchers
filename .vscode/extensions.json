@@ -1,6 +1,37 @@
 {
   "recommendations": [
+    "vue.volar",
+    "bradlc.vscode-tailwindcss",
     "dbaeumer.vscode-eslint",
-    "Vue.volar"
+    "rvest.vs-code-prettier-eslint",
+    "esbenp.prettier-vscode",
+    "antfu.iconify",
+    "alexcvzz.vscode-sqlite",
+    "christian-kohler.npm-intellisense",
+    "csstools.postcss",
+    "samatech.postcss-vue",
+    "anthropic.claude-code",
+    "upstash.context7-mcp",
+    "wesbos.theme-cobalt2",
+    "johnpapa.vscode-peacock"
+  ],
+  "unwantedRecommendations": [
+    "ms-python.python",
+    "ms-python.debugpy",
+    "ms-python.vscode-pylance",
+    "ms-python.vscode-python-envs",
+    "ms-vscode-remote.remote-containers",
+    "ms-vscode-remote.remote-ssh",
+    "ms-vscode-remote.remote-ssh-edit",
+    "ms-vscode.remote-explorer",
+    "docker.docker",
+    "ms-azuretools.vscode-docker",
+    "ms-azuretools.vscode-containers",
+    "prisma.prisma",
+    "kumar-harsh.graphql-for-vscode",
+    "ecmel.vscode-html-css",
+    "zignd.html-css-class-completion",
+    "hollowtree.vue-snippets"
   ]
 }
+
