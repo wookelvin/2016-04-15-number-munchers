@@ -70,23 +70,21 @@ Work is broken into phases. Each phase should be fully working before moving to 
 
 ### Phase 1 — Project Scaffold
 
-> Goal: empty Nuxt app running locally, deployable to Cloudflare Workers, D1 wired up.
+> Goal: empty Nuxt app running locally with all tooling in place.
 
 - [ ] Init Nuxt project with TypeScript (`nuxi init`)
-- [ ] Configure `nuxt.config.ts` — set `nitro.preset = 'cloudflare-module'`, enable `@nuxtjs/tailwindcss`
-- [ ] Add `wrangler.toml` — Workers name, D1 binding declaration (`DB`)
+- [ ] Configure `nuxt.config.ts` — enable `@nuxtjs/tailwindcss`, `@pinia/nuxt`, `nuxt-auth-utils`
 - [ ] Install core packages: `vueuse`, `pinia`, `@pinia/nuxt`, `nuxt-auth-utils`, `shadcn-vue`
 - [ ] Initialize shadcn-vue (`npx shadcn-vue@latest init`)
 - [ ] Init AssemblyScript engine package under `engine/` (`npx asinit engine`)
 - [ ] Add `engine:build` npm script — compiles `.wasm` into `public/` for Nuxt to serve
 - [ ] Smoke test: `npm run dev` serves a blank Nuxt page with no errors
-- [ ] Smoke test: `npm run deploy` deploys successfully to CF Workers
 
 ---
 
 ### Phase 2 — Database & Auth
 
-> Goal: Google sign-in works end-to-end; user row persisted in D1.
+> Goal: Google sign-in works end-to-end locally; user row persisted in local D1.
 
 - [ ] Write `migrations/0001_initial.sql` — `users` and `scores` tables
 - [ ] Apply migration locally: `wrangler d1 migrations apply DB --local`
@@ -97,7 +95,6 @@ Work is broken into phases. Each phase should be fully working before moving to 
 - [ ] Add `server/middleware/session.ts` — attach decoded session to `event.context.user`
 - [ ] Expose `useUserSession()` composable on the frontend (provided by nuxt-auth-utils)
 - [ ] Sign-in / sign-out buttons in app shell; guest state when not signed in
-- [ ] Apply migration to production D1: `wrangler d1 migrations apply DB`
 
 ---
 
@@ -148,17 +145,22 @@ Work is broken into phases. Each phase should be fully working before moving to 
 
 ---
 
-### Phase 6 — Production Hardening
+### Phase 6 — Cloudflare Deployment & Production Hardening
 
-> Goal: deployed, stable, and observable.
+> Goal: fully deployed to Cloudflare Workers, stable, and observable.
 
+- [ ] Add `wrangler.toml` — Workers name, D1 binding declaration (`DB`)
+- [ ] Configure `nuxt.config.ts` — set `nitro.preset = 'cloudflare-module'`
+- [ ] Create D1 database: `wrangler d1 create number-munchers`
+- [ ] Apply migrations to production D1: `wrangler d1 migrations apply DB`
 - [ ] Set CF secrets: `NUXT_OAUTH_GOOGLE_CLIENT_ID`, `NUXT_OAUTH_GOOGLE_CLIENT_SECRET`, `NUXT_SESSION_SECRET`
 - [ ] Add authorized redirect URI in Google Cloud Console for the production domain
+- [ ] Smoke test: `npm run deploy` deploys successfully to CF Workers
 - [ ] Rate-limit `POST /api/scores` (CF Workers rate limiting or simple IP check)
 - [ ] `robots.txt` and basic SEO meta tags
 - [ ] Test full flow on mobile (iOS Safari + Android Chrome)
 - [ ] Confirm 60 FPS on mid-range mobile hardware
-- [ ] Set up GitHub Actions CI — lint, type-check, WASM build on every push
+- [ ] Set up GitHub Actions CI — lint, type-check, WASM build, deploy on merge to `main`
 
 ---
 
