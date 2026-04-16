@@ -37,6 +37,7 @@ Number Munchers was one of the great educational arcade games. This project brin
 | [shadcn-ui for Vue](https://www.shadcn-vue.com/) | Accessible, unstyled-by-default UI components (dialogs, buttons, tables) for menus and leaderboard screens |
 | [nuxt-auth-utils](https://github.com/atinux/nuxt-auth-utils) | OAuth provider wiring + secure cookie session — minimal setup for Google, easy to extend |
 | [AssemblyScript](https://www.assemblyscript.org/) | TypeScript-to-WASM compiler for the game engine |
+| [Drizzle ORM](https://orm.drizzle.team/) | Lightweight, type-safe SQL ORM for D1 — schema in TypeScript, auto-generated migrations, zero-runtime overhead ideal for edge |
 
 ---
 
@@ -86,12 +87,15 @@ Work is broken into phases. Each phase should be fully working before moving to 
 
 > Goal: Google sign-in works end-to-end locally; user row persisted in local D1.
 
-- [ ] Write `migrations/0001_initial.sql` — `users` and `scores` tables
+- [ ] Install **Drizzle ORM**: `npm install drizzle-orm @cloudflare/workers-types`
+- [ ] Create `drizzle.config.ts` — D1 driver configuration (schema path, migrations output)
+- [ ] Define `server/db/schema.ts` — Drizzle schema for `users` and `scores` tables using ORM
+- [ ] Generate initial migration: `npx drizzle-kit generate:sqlite`
 - [ ] Apply migration locally: `wrangler d1 migrations apply DB --local`
-- [ ] Implement `server/utils/db.ts` — typed D1 query helpers
+- [ ] Implement `server/db/index.ts` — Drizzle client bound to D1; typed query helpers (insert, select, update user/score)
 - [ ] Configure `nuxt-auth-utils` Google provider in `nuxt.config.ts`
 - [ ] Implement `server/api/auth/google.get.ts` — OAuth redirect
-- [ ] Implement `server/api/auth/google.callback.get.ts` — exchange code, upsert user, set session cookie
+- [ ] Implement `server/api/auth/google.callback.get.ts` — exchange code, upsert user via Drizzle, set session cookie
 - [ ] Add `server/middleware/session.ts` — attach decoded session to `event.context.user`
 - [ ] Expose `useUserSession()` composable on the frontend (provided by nuxt-auth-utils)
 - [ ] Sign-in / sign-out buttons in app shell; guest state when not signed in
@@ -208,48 +212,83 @@ number-munchers/
 │   │   └── auth/
 │   │       ├── google.get.ts      # OAuth redirect
 │   │       └── google.callback.get.ts
-│   ├── middleware/
-│   │   └── session.ts             # Validate JWT session cookie
-│   └── utils/
-│       └── db.ts                  # D1 binding helpers and typed queries
+│   ├── db/
+│   │   ├── schema.ts              # Drizzle schema definition (users, scores)
+│   │   └── index.ts               # Drizzle client + typed query helpers
+│   └── middleware/
+│       └── session.ts             # Validate JWT session cookie
 │
-├── migrations/                    # D1 SQL migrations
-│   └── 0001_initial.sql
+├── migrations/                    # Auto-generated Drizzle migrations (git-tracked)
+│   └── 0001_initial_schema.sql
 │
 ├── nuxt.config.ts                 # nitro.preset = 'cloudflare-module'
+├── drizzle.config.ts              # Drizzle CLI config (schema path, driver)
 ├── wrangler.toml                  # CF Workers config, D1 binding declaration
 └── README.md
 ```
 
 ---
 
-## Database Schema (Initial)
+## Database Schema (Drizzle ORM)
 
-Migrations live in `migrations/` and are applied to D1 via `wrangler d1 migrations apply`.
+Define tables in `server/db/schema.ts` using Drizzle:
 
-```sql
--- migrations/0001_initial.sql
+```typescript
+import { sql } from 'drizzle-orm'
+import { sqliteTable, text, integer, primaryKey, index } from 'drizzle-orm/sqlite-core'
 
-CREATE TABLE users (
-  id           TEXT PRIMARY KEY,   -- Google sub claim
-  email        TEXT NOT NULL,
-  display_name TEXT,
-  created_at   INTEGER NOT NULL
-);
+export const users = sqliteTable('users', {
+  id: text('id').primaryKey(), // Google sub claim
+  email: text('email').notNull(),
+  displayName: text('display_name'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+})
 
-CREATE TABLE scores (
-  id           INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id      TEXT REFERENCES users(id),  -- NULL for guest scores
-  score        INTEGER NOT NULL,
-  level        INTEGER NOT NULL,
-  rule_set     TEXT NOT NULL,              -- e.g. "multiples", "primes"
-  played_at    INTEGER NOT NULL
-);
-
-CREATE INDEX idx_scores_score ON scores(score DESC);
+export const scores = sqliteTable(
+  'scores',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    userId: text('user_id').references(() => users.id), // NULL for guest scores
+    score: integer('score').notNull(),
+    level: integer('level').notNull(),
+    ruleSet: text('rule_set').notNull(), // e.g. "multiples", "primes"
+    playedAt: integer('played_at', { mode: 'timestamp' }).notNull(),
+  },
+  table => ({
+    scoreIdx: index('idx_scores_score').on(table.score),
+  }),
+)
 ```
 
-D1 is declared as a binding in `wrangler.toml` and accessed in Nitro server routes via `event.context.cloudflare.env.DB`.
+**Migration workflow:**
+1. Modify `server/db/schema.ts` as needed
+2. Generate migrations: `npx drizzle-kit generate:sqlite`
+3. Apply locally: `wrangler d1 migrations apply DB --local`
+4. On deployment, migrations auto-apply to production D1
+
+**Database access** (in server routes):
+
+```typescript
+import { drizzle } from 'drizzle-orm/d1'
+import * as schema from '~/server/db/schema'
+
+export default defineEventHandler(async event => {
+  const db = drizzle(event.context.cloudflare.env.DB, { schema })
+  
+  // Type-safe queries
+  const user = await db.select().from(schema.users).where(
+    eq(schema.users.id, googleId)
+  )
+  
+  await db.insert(schema.scores).values({
+    userId: userId,
+    score: 1200,
+    level: 5,
+    ruleSet: 'multiples',
+    playedAt: new Date(),
+  })
+})
+```
 
 ---
 
