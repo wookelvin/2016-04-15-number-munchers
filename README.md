@@ -293,3 +293,86 @@ NUXT_SESSION_SECRET=...   # 32+ char random string for cookie signing
 2. **60 FPS baseline** — rendering and input handling are optimized to never drop frames during normal gameplay.
 3. **Mobile is first-class** — touch targets, layout, and performance are tested on mobile from day one, not bolted on later.
 4. **Auth is optional** — the full game is playable as a guest; sign-in only unlocks score saving and leaderboard.
+
+---
+
+## Development
+
+### Code Style
+
+**ESLint + Stylistic** — enforced via `eslint.config.mjs`, auto-fixed on save in VSCode.
+
+| Rule | Setting | Why |
+|---|---|---|
+| Indent | 2 spaces | Nuxt standard; readable on mobile |
+| Quotes | Single (`'`) | Modern JavaScript convention |
+| Semicolons | None | Clean, modern feel (ASI safe in our patterns) |
+| Trailing commas | Always multiline | Cleaner diffs, easier cherry-picks |
+| Brace style | 1TBS | Standard control flow style |
+
+**Vue component structure** (strict ordering in `<script setup lang="ts">` SFC):
+
+```vue
+<script setup lang="ts">
+import type { MyType } from '@/types'
+import { ref } from 'vue'
+import MyComponent from '@/components/MyComponent.vue'
+
+interface Props {
+  title: string
+}
+
+defineProps<Props>()
+const emit = defineEmits<{ update: [value: string] }>()
+
+const count = ref(0)
+const handleClick = () => { count.value++ }
+</script>
+
+<template>
+  <MyComponent :title="title" @update="emit('update', $event)">
+    <button @click="handleClick">Count: {{ count }}</button>
+  </MyComponent>
+</template>
+
+<style scoped>
+button {
+  @apply px-4 py-2 rounded bg-primary text-primary-foreground;
+}
+</style>
+```
+
+**Key Vue conventions:**
+- `<script setup lang="ts">` at the top (imports, types, reactive state, handlers)
+- `<template>` in the middle (clean markup, minimal logic)
+- `<style scoped>` at the bottom (Tailwind + custom rules)
+- Type imports use `import type { ... }`
+- Component names in PascalCase (enforced in templates by ESLint)
+- Props/emits declared with `defineProps<T>()` / `defineEmits<T>()`
+
+### VSCode Setup
+
+**.vscode/settings.json** auto-fixes ESLint errors on save:
+
+```json
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  }
+}
+```
+
+**Required extension:** [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)  
+(Workspace recommends it automatically via `.vscode/extensions.json`.)
+
+### Running ESLint Locally
+
+```bash
+# Check for violations
+npm run lint
+
+# Auto-fix everything
+npm run lint:fix
+```
+
+---
