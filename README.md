@@ -62,21 +62,103 @@ Number Munchers is a grid-based game where the player navigates a character acro
 
 ---
 
-## Features — MVP
+## Build Roadmap
 
-- [ ] WASM game engine (AssemblyScript)
-- [ ] WebGL/Canvas renderer targeting 60 FPS
-- [ ] Responsive layout for desktop and mobile
-- [ ] Touch input support
-- [ ] Multiple rule categories (multiples, factors, primes, comparisons)
-- [ ] Troggle enemy AI
-- [ ] Level progression
-- [ ] Google OAuth sign-in (nuxt-auth-utils)
-- [ ] Guest play (no sign-in required)
-- [ ] High score persistence (Cloudflare D1)
-- [ ] Global leaderboard view
-- [ ] Personal best tracking per signed-in user
-- [ ] Deployed to Cloudflare Workers via Nitro preset
+Work is broken into phases. Each phase should be fully working before moving to the next — the game is playable (as a guest, locally) after Phase 3.
+
+---
+
+### Phase 1 — Project Scaffold
+
+> Goal: empty Nuxt app running locally, deployable to Cloudflare Workers, D1 wired up.
+
+- [ ] Init Nuxt project with TypeScript (`nuxi init`)
+- [ ] Configure `nuxt.config.ts` — set `nitro.preset = 'cloudflare-module'`, enable `@nuxtjs/tailwindcss`
+- [ ] Add `wrangler.toml` — Workers name, D1 binding declaration (`DB`)
+- [ ] Install core packages: `vueuse`, `pinia`, `@pinia/nuxt`, `nuxt-auth-utils`, `shadcn-vue`
+- [ ] Initialize shadcn-vue (`npx shadcn-vue@latest init`)
+- [ ] Init AssemblyScript engine package under `engine/` (`npx asinit engine`)
+- [ ] Add `engine:build` npm script — compiles `.wasm` into `public/` for Nuxt to serve
+- [ ] Smoke test: `npm run dev` serves a blank Nuxt page with no errors
+- [ ] Smoke test: `npm run deploy` deploys successfully to CF Workers
+
+---
+
+### Phase 2 — Database & Auth
+
+> Goal: Google sign-in works end-to-end; user row persisted in D1.
+
+- [ ] Write `migrations/0001_initial.sql` — `users` and `scores` tables
+- [ ] Apply migration locally: `wrangler d1 migrations apply DB --local`
+- [ ] Implement `server/utils/db.ts` — typed D1 query helpers
+- [ ] Configure `nuxt-auth-utils` Google provider in `nuxt.config.ts`
+- [ ] Implement `server/api/auth/google.get.ts` — OAuth redirect
+- [ ] Implement `server/api/auth/google.callback.get.ts` — exchange code, upsert user, set session cookie
+- [ ] Add `server/middleware/session.ts` — attach decoded session to `event.context.user`
+- [ ] Expose `useUserSession()` composable on the frontend (provided by nuxt-auth-utils)
+- [ ] Sign-in / sign-out buttons in app shell; guest state when not signed in
+- [ ] Apply migration to production D1: `wrangler d1 migrations apply DB`
+
+---
+
+### Phase 3 — WASM Game Engine
+
+> Goal: core game loop runs in WASM, playable in the browser (no UI polish yet).
+
+- [ ] `engine/assembly/rules.ts` — rule evaluation functions (multiples, factors, primes, comparisons, equals)
+- [ ] `engine/assembly/grid.ts` — grid init, number placement, seeded RNG
+- [ ] `engine/assembly/muncher.ts` — position, move, eat action, life logic
+- [ ] `engine/assembly/troggle.ts` — enemy spawn, basic patrol AI
+- [ ] `engine/assembly/game.ts` — main game loop tick, state machine (playing / dead / level-clear)
+- [ ] `engine/assembly/index.ts` — exported WASM API surface (`init`, `tick`, `move`, `eat`, `getState`)
+- [ ] Build and verify `.wasm` output size and exported symbols
+- [ ] `app/composables/useGameEngine.ts` — load `.wasm`, instantiate, wrap exported API
+- [ ] `app/composables/useInput.ts` — keyboard + mouse + touch → unified directional/action events
+- [ ] `app/composables/useRenderer.ts` — Canvas 2D renderer reading state from WASM each frame
+- [ ] `app/components/GameCanvas.vue` — mounts canvas, wires engine + input + renderer via `useRafFn`
+- [ ] `app/pages/index.vue` — render `<GameCanvas />`, confirm game boots and is playable
+
+---
+
+### Phase 4 — Game UI & Polish
+
+> Goal: the game looks and feels good; HUD is clear; menus work on desktop and mobile.
+
+- [ ] `app/components/GameHUD.vue` — score, lives, level number, current rule displayed above canvas
+- [ ] Start screen — rule display, "Press Start" prompt, difficulty selector
+- [ ] Game-over screen — final score, personal best (if signed in), play again button
+- [ ] Level-clear animation — brief pause, new rule announcement, next level transition
+- [ ] Responsive canvas scaling — fills viewport on mobile, centered with max-width on desktop
+- [ ] Touch controls — tap-to-move and on-screen D-pad for mobile (toggle based on `usePointer`)
+- [ ] Visual polish — smooth movement interpolation, eat animation, Troggle animations
+- [ ] Sound effects (optional stretch — Web Audio API, short clips only)
+
+---
+
+### Phase 5 — Scores & Leaderboard
+
+> Goal: scores saved to D1, leaderboard page live in production.
+
+- [ ] `server/api/scores/index.post.ts` — validate session (allow guest), insert score row
+- [ ] `server/api/scores/index.get.ts` — return top N scores with display names; support `?ruleset=` filter
+- [ ] Submit score automatically on game-over (fire-and-forget fetch)
+- [ ] `app/components/LeaderboardTable.vue` — shadcn Table, sortable by score/level/date
+- [ ] `app/pages/leaderboard.vue` — fetch leaderboard via `useFetch`, show personal best highlighted
+- [ ] Personal best indicator in HUD during gameplay (read from Pinia, populated on session load)
+
+---
+
+### Phase 6 — Production Hardening
+
+> Goal: deployed, stable, and observable.
+
+- [ ] Set CF secrets: `NUXT_OAUTH_GOOGLE_CLIENT_ID`, `NUXT_OAUTH_GOOGLE_CLIENT_SECRET`, `NUXT_SESSION_SECRET`
+- [ ] Add authorized redirect URI in Google Cloud Console for the production domain
+- [ ] Rate-limit `POST /api/scores` (CF Workers rate limiting or simple IP check)
+- [ ] `robots.txt` and basic SEO meta tags
+- [ ] Test full flow on mobile (iOS Safari + Android Chrome)
+- [ ] Confirm 60 FPS on mid-range mobile hardware
+- [ ] Set up GitHub Actions CI — lint, type-check, WASM build on every push
 
 ---
 
