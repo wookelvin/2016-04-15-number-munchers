@@ -108,18 +108,18 @@ Work is broken into phases. Each phase should be fully working before moving to 
 
 > Goal: core game loop runs in WASM, playable in the browser (no UI polish yet).
 
-- [ ] `engine/assembly/rules.ts` — rule evaluation functions (multiples, factors, primes, comparisons, equals)
-- [ ] `engine/assembly/grid.ts` — grid init, number placement, seeded RNG
-- [ ] `engine/assembly/muncher.ts` — position, move, eat action, life logic
-- [ ] `engine/assembly/troggle.ts` — enemy spawn, basic patrol AI
-- [ ] `engine/assembly/game.ts` — main game loop tick, state machine (playing / dead / level-clear)
-- [ ] `engine/assembly/index.ts` — exported WASM API surface (`init`, `tick`, `move`, `eat`, `getState`)
-- [ ] Build and verify `.wasm` output size and exported symbols
-- [ ] `app/composables/useGameEngine.ts` — load `.wasm`, instantiate, wrap exported API
-- [ ] `app/composables/useInput.ts` — keyboard + mouse + touch → unified directional/action events
-- [ ] `app/composables/useRenderer.ts` — Canvas 2D renderer reading state from WASM each frame
-- [ ] `app/components/GameCanvas.vue` — mounts canvas, wires engine + input + renderer via `useRafFn`
-- [ ] `app/pages/index.vue` — render `<GameCanvas />`, confirm game boots and is playable
+- [x] `engine/assembly/rules.ts` — rule evaluation functions (multiples, factors, primes, comparisons, equals)
+- [x] `engine/assembly/grid.ts` — grid init, number placement, seeded RNG
+- [x] `engine/assembly/muncher.ts` — position, move, eat action, life logic
+- [x] `engine/assembly/troggle.ts` — enemy spawn, basic patrol AI
+- [x] `engine/assembly/game.ts` — main game loop tick, state machine (playing / dead / level-clear)
+- [x] `engine/assembly/index.ts` — exported WASM API surface (`init`, `tick`, `move`, `eat`, `getState`)
+- [x] Build and verify `.wasm` output size and exported symbols
+- [x] `app/composables/useGameEngine.ts` — load `.wasm`, instantiate, wrap exported API
+- [x] `app/composables/useInput.ts` — keyboard + mouse + touch → unified directional/action events
+- [x] `app/composables/useRenderer.ts` — Canvas 2D renderer reading state from WASM each frame
+- [x] `app/components/GameCanvas.vue` — mounts canvas, wires engine + input + renderer via `useRafFn`
+- [x] `app/pages/index.vue` — render `<GameCanvas />`, confirm game boots and is playable
 
 ---
 
@@ -127,14 +127,14 @@ Work is broken into phases. Each phase should be fully working before moving to 
 
 > Goal: the game looks and feels good; HUD is clear; menus work on desktop and mobile.
 
-- [ ] `app/components/GameHUD.vue` — score, lives, level number, current rule displayed above canvas
-- [ ] Start screen — rule display, "Press Start" prompt, difficulty selector
-- [ ] Game-over screen — final score, personal best (if signed in), play again button
-- [ ] Level-clear animation — brief pause, new rule announcement, next level transition
-- [ ] Responsive canvas scaling — fills viewport on mobile, centered with max-width on desktop
-- [ ] Touch controls — tap-to-move and on-screen D-pad for mobile (toggle based on `usePointer`)
-- [ ] Visual polish — smooth movement interpolation, eat animation, Troggle animations
-- [ ] Sound effects (optional stretch — Web Audio API, short clips only)
+- [x] `app/components/GameHUD.vue` — score, lives, level number, current rule displayed above canvas
+- [x] Start screen — rule display, "Press Start" prompt, difficulty selector
+- [x] Game-over screen — final score, personal best (if signed in), play again button
+- [x] Level-clear animation — brief pause, new rule announcement, next level transition
+- [x] Responsive canvas scaling — fills viewport on mobile, centered with max-width on desktop
+- [x] Touch controls — tap-to-move and on-screen D-pad for mobile (toggle based on `usePointer`)
+- [x] Visual polish — smooth movement interpolation, eat animation, Troggle animations
+- [x] Sound effects (optional stretch — Web Audio API, short clips only)
 
 ---
 

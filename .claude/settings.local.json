@@ -10,7 +10,11 @@
       "Bash(npx shadcn-vue@latest init --defaults)",
       "Bash(npx asinit *)",
       "Bash(npx assemblyscript/asinit engine --noInstall)",
-      "Bash(npx @assemblyscript/asinit engine --noInstall)"
+      "Bash(npx @assemblyscript/asinit engine --noInstall)",
+      "Bash(npm run *)",
+      "Bash(wasm-opt --version)",
+      "Bash(node -e ' *)",
+      "Bash(npx nuxi *)"
     ]
   }
 }
