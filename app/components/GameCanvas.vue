@@ -349,17 +349,30 @@ const { pause, resume } = useRafFn(({ timestamp }) => {
 .game-canvas {
   display: block;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 48px);
+  margin-top: 48px; /* HUD height */
   touch-action: none;
   outline: none;
   cursor: crosshair;
 }
 
-/* On touch devices, leave bottom space for D-pad */
+/* On touch devices, also leave bottom space for D-pad */
 @media (pointer: coarse) {
   .game-canvas {
-    height: calc(100% - 176px);
-    margin-top: 48px; /* HUD height */
+    height: calc(100% - 48px - 176px);
+  }
+}
+
+@media (max-width: 480px) {
+  .game-canvas {
+    margin-top: 42px;
+    height: calc(100% - 42px);
+  }
+}
+
+@media (max-width: 480px) and (pointer: coarse) {
+  .game-canvas {
+    height: calc(100% - 42px - 176px);
   }
 }
 
