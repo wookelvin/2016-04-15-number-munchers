@@ -78,10 +78,9 @@ function press(dir: number) {
 .dpad-btn {
   width: 52px;
   height: 52px;
-  border: none;
-  border-radius: 10px;
-  background: rgba(22, 27, 34, 0.9);
-  color: #8b949e;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(29, 31, 61, 0.9), rgba(20, 22, 46, 0.9));
+  color: #c7d2fe;
   font-size: 18px;
   display: flex;
   align-items: center;
@@ -89,26 +88,32 @@ function press(dir: number) {
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  transition: background 0.08s, transform 0.08s, color 0.08s;
-  border: 1px solid #30363d;
+  transition: background 0.08s, transform 0.08s, color 0.08s, box-shadow 0.08s;
+  border: 1px solid rgba(127, 135, 196, 0.25);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 4px 10px -4px rgba(0, 0, 0, 0.6);
 }
 
 .dpad-btn:active {
-  background: #21262d;
+  background: rgba(34, 211, 238, 0.18);
+  border-color: rgba(34, 211, 238, 0.6);
   transform: scale(0.92);
-  color: #e6edf3;
+  color: #e6e9f5;
+  box-shadow: 0 0 18px -2px rgba(34, 211, 238, 0.55);
 }
 
 .dpad-eat {
-  background: rgba(31, 111, 235, 0.2);
-  color: #388bfd;
-  border-color: #388bfd;
+  background: linear-gradient(180deg, rgba(74, 222, 128, 0.25), rgba(74, 222, 128, 0.12));
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.55);
   font-size: 22px;
+  box-shadow: 0 0 16px -4px rgba(74, 222, 128, 0.5);
 }
 
 .dpad-eat:active {
-  background: rgba(31, 111, 235, 0.5);
-  color: #e6edf3;
+  background: rgba(74, 222, 128, 0.5);
+  color: #07200f;
+  border-color: rgba(74, 222, 128, 0.9);
+  box-shadow: 0 0 22px -2px rgba(74, 222, 128, 0.75);
 }
 
 @media (max-width: 360px) {

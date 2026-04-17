@@ -31,7 +31,7 @@ const phase = ref<Phase>('start')
 // Easy = 0.5 (every other frame), Normal = 1, Hard = 2
 type Difficulty = 'easy' | 'normal' | 'hard'
 const difficulty = ref<Difficulty>('normal')
-const difficultyOptions: { value: Difficulty; label: string; desc: string }[] = [
+const difficultyOptions: { value: Difficulty, label: string, desc: string }[] = [
   { value: 'easy', label: 'Easy', desc: 'Slow troggles' },
   { value: 'normal', label: 'Normal', desc: 'Classic speed' },
   { value: 'hard', label: 'Hard', desc: 'Fast troggles' },
@@ -240,12 +240,18 @@ const { pause, resume } = useRafFn(({ timestamp }) => {
     <Transition name="fade">
       <div v-if="phase === 'start' && api" class="overlay start-overlay">
         <div class="overlay-card">
-          <h1 class="overlay-title">Number<br>Munchers</h1>
-          <p class="overlay-subtitle">Eat numbers that match the rule.<br>Avoid the Troggles.</p>
+          <h1 class="overlay-title">
+            Number<br>Munchers
+          </h1>
+          <p class="overlay-subtitle">
+            Eat numbers that match the rule.<br>Avoid the Troggles.
+          </p>
 
           <!-- Difficulty -->
           <div class="difficulty-group">
-            <p class="difficulty-label">Difficulty</p>
+            <p class="difficulty-label">
+              Difficulty
+            </p>
             <div class="difficulty-btns">
               <button
                 v-for="d in difficultyOptions"
@@ -276,16 +282,24 @@ const { pause, resume } = useRafFn(({ timestamp }) => {
     <Transition name="pop">
       <div v-if="phase === 'level-clear'" class="overlay level-overlay">
         <div class="overlay-card">
-          <div class="level-badge">Level {{ snapLevel }}</div>
-          <h2 class="overlay-title small">Level Clear!</h2>
-          <p class="overlay-score">+{{ 100 * snapLevel }} bonus points</p>
+          <div class="level-badge">
+            Level {{ snapLevel }}
+          </div>
+          <h2 class="overlay-title small">
+            Level Clear!
+          </h2>
+          <p class="overlay-score">
+            +{{ 100 * snapLevel }} bonus points
+          </p>
           <p class="overlay-next-rule">
             Next: <strong>{{ RULE_NAMES[(snapRule + 1) % RULE_NAMES.length] }}</strong>
           </p>
           <button class="play-btn" @click="doAdvanceLevel">
             Continue
           </button>
-          <p class="overlay-hint">or press Enter</p>
+          <p class="overlay-hint">
+            or press Enter
+          </p>
         </div>
       </div>
     </Transition>
@@ -297,12 +311,18 @@ const { pause, resume } = useRafFn(({ timestamp }) => {
           <h2 class="overlay-title small game-over-title">
             Game Over
           </h2>
-          <p class="overlay-score">Score: {{ snapScore.toLocaleString() }}</p>
-          <p class="overlay-level">Reached Level {{ snapLevel }}</p>
+          <p class="overlay-score">
+            Score: {{ snapScore.toLocaleString() }}
+          </p>
+          <p class="overlay-level">
+            Reached Level {{ snapLevel }}
+          </p>
           <button class="play-btn danger" @click="doRestart">
             Play Again
           </button>
-          <p class="overlay-hint">or press R</p>
+          <p class="overlay-hint">
+            or press R
+          </p>
         </div>
       </div>
     </Transition>
@@ -319,7 +339,7 @@ const { pause, resume } = useRafFn(({ timestamp }) => {
   position: relative;
   width: 100%;
   height: 100%;
-  background: #0d1117;
+  background: #0a0b1e;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -345,12 +365,12 @@ const { pause, resume } = useRafFn(({ timestamp }) => {
 
 .msg {
   position: absolute;
-  font-family: 'Courier New', monospace;
-  font-size: 1rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.9rem;
 }
 
-.loading-msg { color: #8b949e; }
-.error-msg { color: #f85149; }
+.loading-msg { color: #8b92b8; }
+.error-msg { color: #ec4899; }
 
 /* ── Overlays ──────────────────────────────────────────────────────────────── */
 
@@ -360,42 +380,52 @@ const { pause, resume } = useRafFn(({ timestamp }) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(13, 17, 23, 0.88);
-  backdrop-filter: blur(6px);
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 30%, rgba(74, 222, 128, 0.12), transparent 70%),
+    rgba(10, 11, 30, 0.88);
+  backdrop-filter: blur(10px);
   z-index: 20;
   padding: 16px;
 }
 
 .overlay-card {
-  background: #161b22;
-  border: 1px solid #30363d;
-  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)),
+    #14162e;
+  border: 1px solid rgba(127, 135, 196, 0.28);
+  border-radius: 18px;
   padding: 32px 28px;
-  max-width: 340px;
+  max-width: 360px;
   width: 100%;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  font-family: 'Courier New', monospace;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 0 0 1px rgba(74, 222, 128, 0.08),
+    0 30px 60px -20px rgba(0, 0, 0, 0.7);
 }
 
 .overlay-title {
-  font-size: 2.4rem;
-  font-weight: 900;
-  color: #e6edf3;
-  line-height: 1.1;
+  font-family: 'Press Start 2P', system-ui, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #4ade80;
+  line-height: 1.35;
   margin: 0;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 14px rgba(74, 222, 128, 0.5), 0 0 28px rgba(74, 222, 128, 0.25);
 }
 
 .overlay-title.small {
-  font-size: 1.8rem;
+  font-size: 1rem;
 }
 
 .overlay-subtitle {
-  color: #8b949e;
+  color: #8b92b8;
   font-size: 0.85rem;
   line-height: 1.5;
   margin: 0;
@@ -403,40 +433,46 @@ const { pause, resume } = useRafFn(({ timestamp }) => {
 
 .overlay-score {
   font-size: 1.4rem;
-  font-weight: bold;
-  color: #3fb950;
+  font-weight: 700;
+  color: #4ade80;
   margin: 0;
+  text-shadow: 0 0 14px rgba(74, 222, 128, 0.4);
 }
 
 .overlay-level, .overlay-next-rule {
-  color: #8b949e;
+  color: #8b92b8;
   font-size: 0.85rem;
   margin: 0;
 }
 
 .overlay-next-rule strong {
-  color: #388bfd;
+  color: #22d3ee;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.45);
 }
 
 .overlay-hint {
-  color: #484f58;
-  font-size: 0.75rem;
+  color: rgba(139, 146, 184, 0.65);
+  font-size: 0.72rem;
   margin: 0;
+  letter-spacing: 0.05em;
 }
 
 .level-badge {
-  background: #1f6feb;
-  color: #e6edf3;
-  font-size: 0.7rem;
-  font-weight: bold;
+  background: linear-gradient(180deg, rgba(34, 211, 238, 0.25), rgba(34, 211, 238, 0.1));
+  border: 1px solid rgba(34, 211, 238, 0.6);
+  color: #22d3ee;
+  font-size: 0.68rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 3px 10px;
-  border-radius: 20px;
+  letter-spacing: 0.18em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
 }
 
 .game-over-title {
-  color: #f85149;
+  color: #ec4899;
+  text-shadow: 0 0 14px rgba(236, 72, 153, 0.55), 0 0 28px rgba(236, 72, 153, 0.3);
 }
 
 /* ── Difficulty selector ───────────────────────────────────────────────────── */
@@ -446,11 +482,11 @@ const { pause, resume } = useRafFn(({ timestamp }) => {
 }
 
 .difficulty-label {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #8b949e;
-  margin: 0 0 8px;
+  letter-spacing: 0.18em;
+  color: #8b92b8;
+  margin: 0 0 10px;
 }
 
 .difficulty-btns {
@@ -461,70 +497,92 @@ const { pause, resume } = useRafFn(({ timestamp }) => {
 
 .diff-btn {
   flex: 1;
-  padding: 8px 4px;
-  border: 1px solid #30363d;
-  border-radius: 8px;
-  background: #0d1117;
+  padding: 10px 4px;
+  border: 1px solid rgba(127, 135, 196, 0.22);
+  border-radius: 10px;
+  background: rgba(10, 11, 30, 0.7);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  transition: border-color 0.15s, background 0.15s;
+  gap: 3px;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.diff-btn:hover {
+  border-color: rgba(127, 135, 196, 0.4);
 }
 
 .diff-btn.active {
-  border-color: #388bfd;
-  background: rgba(31, 111, 235, 0.12);
+  border-color: rgba(34, 211, 238, 0.7);
+  background: rgba(34, 211, 238, 0.1);
+  box-shadow: 0 0 18px -4px rgba(34, 211, 238, 0.5);
 }
 
 .diff-name {
-  font-family: 'Courier New', monospace;
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: #e6edf3;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #e6e9f5;
+  letter-spacing: 0.02em;
+}
+
+.diff-btn.active .diff-name {
+  color: #22d3ee;
 }
 
 .diff-desc {
-  font-family: 'Courier New', monospace;
-  font-size: 0.65rem;
-  color: #8b949e;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.62rem;
+  color: #8b92b8;
 }
 
 /* ── Buttons ───────────────────────────────────────────────────────────────── */
 
 .play-btn {
   width: 100%;
-  padding: 12px 20px;
-  background: #238636;
-  color: #e6edf3;
-  border: none;
-  border-radius: 8px;
-  font-family: 'Courier New', monospace;
-  font-size: 1rem;
-  font-weight: bold;
+  padding: 13px 20px;
+  background: linear-gradient(180deg, #5ee891, #34c46c);
+  color: #07200f;
+  border: 1px solid rgba(74, 222, 128, 0.7);
+  border-radius: 10px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
   cursor: pointer;
-  letter-spacing: 0.05em;
-  transition: opacity 0.15s, transform 0.1s;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: filter 0.15s, transform 0.1s, box-shadow 0.15s;
+  box-shadow:
+    0 0 0 1px rgba(74, 222, 128, 0.22),
+    0 10px 28px -8px rgba(74, 222, 128, 0.55);
 }
 
-.play-btn:hover { opacity: 0.88; }
-.play-btn:active { transform: scale(0.97); }
+.play-btn:hover { filter: brightness(1.06); box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.35), 0 12px 32px -8px rgba(74, 222, 128, 0.7); }
+.play-btn:active { transform: translateY(1px) scale(0.98); }
 
 .play-btn.danger {
-  background: #b91c1c;
+  background: linear-gradient(180deg, #f472b6, #c12b7a);
+  color: #fdf2f8;
+  border-color: rgba(236, 72, 153, 0.75);
+  box-shadow:
+    0 0 0 1px rgba(236, 72, 153, 0.22),
+    0 10px 28px -8px rgba(236, 72, 153, 0.55);
 }
+
+.play-btn.danger:hover { box-shadow: 0 0 0 1px rgba(236, 72, 153, 0.35), 0 12px 32px -8px rgba(236, 72, 153, 0.7); }
 
 /* ── Controls hint ─────────────────────────────────────────────────────────── */
 
 .controls-hint {
-  color: #484f58;
+  color: rgba(139, 146, 184, 0.7);
   font-size: 0.7rem;
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
   justify-content: center;
   margin: 0;
+  letter-spacing: 0.02em;
 }
 
 /* ── D-Pad ─────────────────────────────────────────────────────────────────── */

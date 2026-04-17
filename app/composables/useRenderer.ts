@@ -8,24 +8,25 @@ import type { GameEngineExports } from './useGameEngine'
 import { GAME_STATE_PLAYING } from './useGameEngine'
 
 // ── Colour palette ────────────────────────────────────────────────────────────
+// Kept in sync with CSS variables in app/assets/css/main.css (Arcade Neon).
 
 const C = {
-  bg: '#0d1117',
-  cellBg: '#161b22',
-  cellBorder: '#21262d',
-  correct: '#1f6feb',
-  correctHover: '#388bfd',
-  correctText: '#e6edf3',
-  wrong: '#3d2200',
-  wrongText: '#e3b341',
-  eaten: '#0d1117',
-  eatFlash: '#56d364',
-  muncher: '#3fb950',
-  muncherDark: '#238636',
-  muncherEye: '#0d1117',
-  troggle: '#f85149',
-  troggleDark: '#b91c1c',
-  troggleEye: '#ffffff',
+  bg: '#0a0b1e', // --background
+  cellBg: '#14162e', // --card
+  cellBorder: 'rgba(127, 135, 196, 0.18)', // --border
+  correct: '#22d3ee', // --accent (cyan) — cells that match the rule
+  correctHover: '#67e8f9',
+  correctText: '#052633',
+  wrong: '#1d1f3d', // --secondary — neutral dim for non-matching cells
+  wrongText: '#c7d2fe', // soft indigo text
+  eaten: '#0a0b1e',
+  eatFlash: '#4ade80', // --primary green flash on successful eat
+  muncher: '#4ade80', // --primary
+  muncherDark: '#16a34a',
+  muncherEye: '#07200f',
+  troggle: '#ec4899', // --destructive
+  troggleDark: '#be185d',
+  troggleEye: '#fdf2f8',
 }
 
 // ── Renderer ──────────────────────────────────────────────────────────────────
@@ -134,7 +135,7 @@ export function useRenderer(canvas: HTMLCanvasElement) {
         ctx.fillRect(cx + pad, cy + pad, cellW - pad * 2, cellH - pad * 2)
 
         ctx.fillStyle = isCorrect ? C.correctText : C.wrongText
-        ctx.font = `bold ${Math.floor(cellH * 0.38)}px 'Courier New', monospace`
+        ctx.font = `700 ${Math.floor(cellH * 0.4)}px 'JetBrains Mono', ui-monospace, 'Courier New', monospace`
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.fillText(String(num), cx + cellW / 2, cy + cellH / 2)

@@ -24,9 +24,9 @@ export interface GameEngineExports {
   // Grid
   getGridWidth(): number
   getGridHeight(): number
-  getCell(i: number): number     // 0 if eaten
+  getCell(i: number): number // 0 if eaten
   isCellEaten(i: number): number // 1 or 0
-  getCellRaw(i: number): number  // number regardless of eaten state
+  getCellRaw(i: number): number // number regardless of eaten state
   // Troggles
   getTroggleCount(): number
   getTroggleX(i: number): number

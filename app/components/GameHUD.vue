@@ -51,22 +51,23 @@ const props = defineProps<Props>()
   align-items: center;
   justify-content: space-between;
   padding: 0 14px;
-  background: rgba(13, 17, 23, 0.92);
-  border-bottom: 1px solid #21262d;
-  backdrop-filter: blur(4px);
+  background: linear-gradient(180deg, rgba(10, 11, 30, 0.95), rgba(10, 11, 30, 0.78));
+  border-bottom: 1px solid rgba(127, 135, 196, 0.22);
+  box-shadow: 0 1px 0 rgba(74, 222, 128, 0.18) inset, 0 8px 20px -8px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
   z-index: 10;
-  font-family: 'Courier New', monospace;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
   user-select: none;
 }
 
 .hud-label {
   font-size: 9px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #8b949e;
+  color: #8b92b8;
   display: block;
   line-height: 1;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 }
 
 .hud-rule {
@@ -76,9 +77,10 @@ const props = defineProps<Props>()
 
 .hud-rule-name {
   font-size: 14px;
-  font-weight: bold;
-  color: #388bfd;
+  font-weight: 700;
+  color: #22d3ee;
   line-height: 1.2;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
 }
 
 .hud-stats {
@@ -95,23 +97,25 @@ const props = defineProps<Props>()
 
 .hud-value {
   font-size: 13px;
-  font-weight: bold;
-  color: #e6edf3;
+  font-weight: 700;
+  color: #e6e9f5;
   line-height: 1.2;
 }
 
 .hud-lives {
   display: flex;
-  gap: 2px;
+  gap: 3px;
 }
 
 .heart {
-  color: #f85149;
-  font-size: 12px;
+  color: #ec4899;
+  font-size: 13px;
+  text-shadow: 0 0 8px rgba(236, 72, 153, 0.55);
 }
 
 .heart-empty {
-  color: #21262d;
+  color: rgba(127, 135, 196, 0.22);
+  text-shadow: none;
 }
 
 @media (max-width: 480px) {

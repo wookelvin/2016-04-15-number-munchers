@@ -16,7 +16,10 @@ useSeoMeta({ title: 'Play — Number Munchers' })
 .game-page {
   position: fixed;
   inset: 0;
-  background: #090c10;
+  background: #07081a;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74, 222, 128, 0.08), transparent 60%),
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(34, 211, 238, 0.07), transparent 60%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,9 +40,12 @@ useSeoMeta({ title: 'Play — Number Munchers' })
     max-height: min(90vh, 750px);
     width: auto;
     height: auto;
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 0 0 1px #30363d, 0 24px 64px rgba(0, 0, 0, 0.6);
+    box-shadow:
+      0 0 0 1px rgba(127, 135, 196, 0.25),
+      0 0 40px -8px rgba(74, 222, 128, 0.2),
+      0 24px 64px rgba(0, 0, 0, 0.7);
   }
 }
 </style>
