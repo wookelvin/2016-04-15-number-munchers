@@ -38,6 +38,13 @@ const difficultyOptions: { value: Difficulty, label: string, desc: string }[] = 
 ]
 let tickAccum = 0 // fractional tick accumulator for easy mode
 
+// Death-animation sequencing: freeze ticks briefly on life loss; delay the
+// Game Over overlay so the on-canvas death animation can play first.
+let prevLivesLocal = -1
+let tickFreezeUntil = 0
+const DEATH_FREEZE_MS = 850
+const FINAL_DEATH_OVERLAY_DELAY_MS = 1500
+
 // ── Reactive state snapshot (synced each RAF frame) ──────────────────────────
 
 const snapScore = ref(0)
@@ -130,6 +137,8 @@ function doStartGame() {
   prevWasmState = GAME_STATE_PLAYING
   phase.value = 'playing'
   tickAccum = 0
+  prevLivesLocal = api.value.getLives()
+  tickFreezeUntil = 0
   resume()
 }
 
@@ -180,22 +189,41 @@ const { pause, resume } = useRafFn(({ timestamp }) => {
 
   // Tick game logic only while playing
   if (phase.value === 'playing') {
-    const tickRate = difficulty.value === 'easy' ? 0.5 : difficulty.value === 'hard' ? 2 : 1
-    tickAccum += tickRate
-    while (tickAccum >= 1) {
-      api.value.gameTick()
-      tickAccum--
+    // Detect life loss → freeze ticks so the canvas death anim can play
+    const livesNow = api.value.getLives()
+    if (prevLivesLocal > 0 && livesNow < prevLivesLocal) {
+      tickFreezeUntil = timestamp + DEATH_FREEZE_MS
+    }
+    prevLivesLocal = livesNow
+
+    if (timestamp >= tickFreezeUntil) {
+      const tickRate = difficulty.value === 'easy' ? 0.5 : difficulty.value === 'hard' ? 2 : 1
+      tickAccum += tickRate
+      while (tickAccum >= 1) {
+        api.value.gameTick()
+        tickAccum--
+      }
     }
 
     // Detect state transitions
     const wasmState = api.value.getGameState()
     if (wasmState !== prevWasmState) {
       if (wasmState === GAME_STATE_DEAD) {
-        phase.value = 'dead'
         sound.playGameOver()
+        // Let the on-canvas death animation play before showing the overlay
+        setTimeout(() => {
+          if (api.value && api.value.getGameState() === GAME_STATE_DEAD) {
+            phase.value = 'dead'
+          }
+        }, FINAL_DEATH_OVERLAY_DELAY_MS)
       } else if (wasmState === GAME_STATE_LEVEL_CLEAR) {
-        phase.value = 'level-clear'
         sound.playLevelClear()
+        tickFreezeUntil = timestamp + 1700 // pause enemy/muncher ticks during celebration
+        setTimeout(() => {
+          if (api.value && api.value.getGameState() === GAME_STATE_LEVEL_CLEAR) {
+            phase.value = 'level-clear'
+          }
+        }, 1700)
       }
       prevWasmState = wasmState
     }

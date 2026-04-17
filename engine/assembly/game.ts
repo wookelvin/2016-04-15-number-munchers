@@ -85,11 +85,14 @@ function fillGrid(): void {
 }
 
 function respawnMuncher(): void {
-  muncherX = 0
-  muncherY = 0
-  // Ensure spawn cell is not occupied by a troggle (shift right if needed)
-  if (troggleAt(0, 0)) {
-    muncherX = 1
+  muncherX = GRID_WIDTH / 2
+  muncherY = GRID_HEIGHT / 2
+  // If a troggle occupies the center, nudge to an adjacent free cell
+  if (troggleAt(muncherX, muncherY)) {
+    if (muncherX + 1 < GRID_WIDTH && !troggleAt(muncherX + 1, muncherY)) muncherX += 1
+    else if (muncherX - 1 >= 0 && !troggleAt(muncherX - 1, muncherY)) muncherX -= 1
+    else if (muncherY + 1 < GRID_HEIGHT && !troggleAt(muncherX, muncherY + 1)) muncherY += 1
+    else if (muncherY - 1 >= 0 && !troggleAt(muncherX, muncherY - 1)) muncherY -= 1
   }
 }
 
