@@ -14,7 +14,10 @@
       "Bash(npm run *)",
       "Bash(wasm-opt --version)",
       "Bash(node -e ' *)",
-      "Bash(npx nuxi *)"
+      "Bash(npx nuxi *)",
+      "Bash(ln -s ../../../node_modules node_modules)",
+      "Bash(npx nuxt *)",
+      "Bash(git -C /Users/kelvinwoo/proj/2026-04-15-NumberMunchers branch --show-current)"
     ]
   }
 }

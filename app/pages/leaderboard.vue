@@ -18,102 +18,69 @@ onMounted(async () => {
 
 <template>
   <div>
-    <h2 text="2xl font-bold" mb="6">
+    <h2 class="text-2xl font-bold mb-6">
       Global Leaderboard
     </h2>
 
-    <div v-if="loading" text="center" py="12">
-      <p text="muted-foreground">
+    <div v-if="loading" class="text-center py-12">
+      <p class="text-muted-foreground">
         Loading scores...
       </p>
     </div>
 
     <div
       v-else-if="error"
-      rounded="lg"
-      border="border-destructive"
-      bg="destructive/10"
-      p="4"
-      text="destructive"
+      class="rounded-lg border border-destructive bg-destructive/10 p-4 text-destructive"
     >
       <p>{{ error }}</p>
     </div>
 
-    <div v-else-if="scores.length === 0" text="center" py="12">
-      <p text="muted-foreground">
+    <div v-else-if="scores.length === 0" class="text-center py-12">
+      <p class="text-muted-foreground">
         No scores yet. Be the first to play!
       </p>
     </div>
 
-    <div v-else overflow="x-auto">
-      <table w="full" text="sm">
-        <thead border-b="border">
+    <div v-else class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="border-b">
           <tr>
-            <th
-              text="left font-semibold"
-              px="4"
-              py="2"
-            >
+            <th class="text-left font-semibold px-4 py-2">
               Rank
             </th>
-            <th
-              text="left font-semibold"
-              px="4"
-              py="2"
-            >
+            <th class="text-left font-semibold px-4 py-2">
               Player
             </th>
-            <th
-              text="right font-semibold"
-              px="4"
-              py="2"
-            >
+            <th class="text-right font-semibold px-4 py-2">
               Score
             </th>
-            <th
-              text="right font-semibold"
-              px="4"
-              py="2"
-            >
+            <th class="text-right font-semibold px-4 py-2">
               Level
             </th>
-            <th
-              text="left font-semibold"
-              px="4"
-              py="2"
-            >
+            <th class="text-left font-semibold px-4 py-2">
               Rule Set
             </th>
           </tr>
         </thead>
-        <tbody divide-y="divide-border">
+        <tbody class="divide-y divide-border">
           <tr
             v-for="(score, idx) in scores"
             :key="score.id"
-            hover="bg-muted"
-            transition="colors"
+            class="hover:bg-muted transition-colors"
           >
-            <td px="4" py="3" font="medium">
+            <td class="px-4 py-3 font-medium">
               {{ idx + 1 }}
             </td>
-            <td px="4" py="3">
+            <td class="px-4 py-3">
               {{ score.user?.displayName || score.user?.email || 'Guest' }}
             </td>
-            <td
-              px="4"
-              py="3"
-              text="right font-bold"
-            >
+            <td class="px-4 py-3 text-right font-bold">
               {{ score.score }}
             </td>
-            <td px="4" py="3" text="right">
+            <td class="px-4 py-3 text-right">
               {{ score.level }}
             </td>
-            <td
-              px="4"
-              py="3"
-              text="xs muted-foreground capitalize"
-            >
+            <td class="px-4 py-3 text-xs text-muted-foreground capitalize">
               {{ score.ruleSet }}
             </td>
           </tr>
